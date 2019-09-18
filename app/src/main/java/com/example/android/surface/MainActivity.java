@@ -19,7 +19,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
     MyView v;
     Bitmap ball;
@@ -42,14 +42,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         v = new MyView(this);
-        v.setOnTouchListener((View.OnTouchListener) this);
+        v.setOnTouchListener(this);
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background);
         x = y = 0;
         setContentView(v);
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
         v.pause();
     }
@@ -82,48 +82,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class MyView extends SurfaceView implements Runnable {
-
-        Thread t;
-        SurfaceHolder holder;
-        boolean isRunning = false;
-
-        public MyView(Context context){
-            super(context);
-            holder = getHolder();
-
-            Canvas c = holder.lockCanvas();
-        }
-
-        public void run(){
-           while(isRunning){
-               if(!holder.getSurface().isValid()){
-                   continue;
-               }
-                Canvas c = holder.lockCanvas();
-               c.drawARGB(255, 150, 150, 10);
-               c.drawBitmap(ball, x, y, null);
-               holder.unlockCanvasAndPost(c);
-           }
-        }
-
-        public void pause(){
-            isRunning = false;
-            while(true){
-                try{
-                    t.join();
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        public void resume(){
-            isRunning = true;
-            t = new Thread(this);
-            t.start();
-        }
-    }
 
     public boolean onTouch(View v, MotionEvent me){
        x = me.getX();
