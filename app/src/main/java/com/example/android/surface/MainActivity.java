@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -18,17 +20,26 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
-    MyView v;
-    Bitmap ball;
-    float x, y;
+    private Button redButton = null;
+
+    private Button greenButton = null;
+
+    private boolean drawBall = true;
+
+    private LinearLayout canvasLayout = null;
+
+    MySurface customSurfaceView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //  setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -41,24 +52,55 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             }
         });
 
-        v = new MyView(this);
-        v.setOnTouchListener(this);
-        ball = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background);
-        x = y = 0;
-        setContentView(v);
+        setTitle("SurfaceView");
+
+        initControls();
+
+        getSupportActionBar().hide();
+
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        customSurfaceView = new MySurface(getApplicationContext());
+
+        customSurfaceView.setOnTouchListener(this);
+
+        canvasLayout.addView(customSurfaceView);
+
+        redButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawBall = true;
+            }
+        });
+
+        greenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawBall = false;
+            }
+        });
+
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        v.pause();
+    private void initControls()
+    {
+        if(redButton == null)
+        {
+            redButton = (Button)findViewById(R.id.redButton);
+        }
+
+        if(greenButton == null)
+        {
+            greenButton = (Button)findViewById(R.id.greenButton);
+        }
+
+        // This layout is used to contain custom surfaceview object.
+        if(canvasLayout == null)
+        {
+            canvasLayout = (LinearLayout)findViewById(R.id.customViewLayout);
+        }
     }
 
-    @Override
-    protected void onResume(){
-        super.onResume();
-        v.resume();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,11 +125,43 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
-    public boolean onTouch(View v, MotionEvent me){
-       x = me.getX();
-       y = me.getY();
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
 
-       return false;
+        // If user touch the custom SurfaceView object.
+        if(view instanceof SurfaceView) {
+            view.invalidate();
+
+            float x = motionEvent.getX();
+
+            float y = motionEvent.getY();
+
+            customSurfaceView.setCircleX(x);
+
+            customSurfaceView.setCircleY(y);
+
+            if (drawBall) {
+                // Create and set a red paint to custom surfaceview.
+                Paint paint = new Paint();
+                paint.setColor(Color.RED);
+                customSurfaceView.setPaint(paint);
+
+                customSurfaceView.drawPoint();
+            } else {
+                // Create and set a green paint to custom surfaceview.
+                Paint paint = new Paint();
+                paint.setColor(Color.GREEN);
+                customSurfaceView.setPaint(paint);
+
+                customSurfaceView.drawRect();
+            }
+
+            // Tell android os the onTouch event has been processed.
+            return true;
+        }else
+        {
+            // Tell android os the onTouch event has not been processed.
+            return false;
+        }
     }
-
 }
