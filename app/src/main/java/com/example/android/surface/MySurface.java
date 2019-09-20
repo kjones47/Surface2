@@ -40,17 +40,24 @@ public class MySurface extends SurfaceView implements SurfaceHolder.Callback {
 
         Canvas c = holder.lockCanvas();
 
-        Paint background = new Paint();
-        background.setColor(Color.RED);
-        c.drawRect(0, 0, this.getWidth(), this.getHeight(), background);
+        holder.unlockCanvasAndPost(c);
 
         paint.setColor(Color.BLUE);
         c.drawCircle(x, y, 100, paint);
 
-        holder.unlockCanvasAndPost(c);
     }
 
     public void drawRect()
+    {
+        Canvas canvas = holder.lockCanvas();
+
+
+        // Draw the rectangle.
+        canvas.drawRect(x, y, x + 200, y + 200, paint);
+
+       holder.unlockCanvasAndPost(canvas);
+    }
+    public void drawGraph()
     {
         Canvas canvas = holder.lockCanvas();
 
@@ -61,10 +68,12 @@ public class MySurface extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawRect(0, 0, this.getWidth(), this.getHeight(), surfaceBackground);
 
         // Draw the rectangle.
-        canvas.drawRect(x, y, x + 200, y + 200, paint);
+        canvas.drawRect(20, 20, 40, this.getHeight() -100, paint);
+        canvas.drawRect(20, this.getHeight() -100, this.getWidth()-50, 60, paint);
 
-       holder.unlockCanvasAndPost(canvas);
+        holder.unlockCanvasAndPost(canvas);
     }
+
 
 
     public float getCircleX() {
