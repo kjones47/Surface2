@@ -43,7 +43,7 @@ public class MySurface extends SurfaceView implements SurfaceHolder.Callback {
         holder.unlockCanvasAndPost(c);
 
         paint.setColor(Color.BLUE);
-        c.drawCircle(x, y, 100, paint);
+        c.drawCircle(x, y, 10, paint);
 
     }
 
@@ -63,13 +63,14 @@ public class MySurface extends SurfaceView implements SurfaceHolder.Callback {
 
         Paint surfaceBackground = new Paint();
         // Set the surfaceview background color.
-        surfaceBackground.setColor(Color.BLUE);
+        surfaceBackground.setColor(Color.WHITE);
         // Draw the surfaceview background color.
         canvas.drawRect(0, 0, this.getWidth(), this.getHeight(), surfaceBackground);
 
         // Draw the rectangle.
-        canvas.drawRect(20, 20, 40, this.getHeight() -100, paint);
-        canvas.drawRect(20, this.getHeight() -100, this.getWidth()-50, 60, paint);
+        paint.setColor(Color.BLACK);
+        canvas.drawRect(20, 20, 40, this.getHeight()/2 - 40, paint);
+        canvas.drawRect(20, this.getHeight()/2 - 40, this.getWidth()-20, this.getHeight()/2 -20, paint);
 
         holder.unlockCanvasAndPost(canvas);
     }

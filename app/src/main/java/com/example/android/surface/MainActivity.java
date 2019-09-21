@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,9 +31,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private Button greenButton = null;
 
+    private int color = Color.GREEN;
     private boolean drawBall = true;
 
     private LinearLayout canvasLayout = null;
+
 
     MySurface customSurfaceView = null;
 
@@ -49,6 +52,34 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });
+        Button red = findViewById(R.id.red);
+        Button blue = findViewById(R.id.blue);
+        Button green = findViewById(R.id.green);
+        Button black = findViewById(R.id.black);
+        red.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                color = Color.RED;
+            }
+        });
+        blue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                color = Color.BLUE;
+            }
+        });
+        green.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                color = Color.GREEN;
+            }
+        });
+        black.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                color = Color.BLACK;
             }
         });
 
@@ -142,15 +173,19 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
             if (drawBall) {
                 // Create and set a red paint to custom surfaceview.
+                customSurfaceView.drawGraph();
                 Paint paint = new Paint();
-                paint.setColor(Color.RED);
+                paint.setColor(color);
+
                 customSurfaceView.setPaint(paint);
 
                 customSurfaceView.drawPoint();
             } else {
                 // Create and set a green paint to custom surfaceview.
+                customSurfaceView.drawGraph();
                 Paint paint = new Paint();
-                paint.setColor(Color.GREEN);
+                paint.setColor(color);
+
                 customSurfaceView.setPaint(paint);
 
                 customSurfaceView.drawRect();
