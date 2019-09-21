@@ -31,11 +31,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private Button greenButton = null;
 
-    private int color = Color.GREEN;
+
     private boolean drawBall = true;
 
     private LinearLayout canvasLayout = null;
 
+    //variables
+    private String title;
+    private String xAxis;
+    private String yAxis;
+    private int minX;
+    private int maxX;
+    private int minY;
+    private int maxY;
+    private int color = Color.GREEN;
 
     MySurface customSurfaceView = null;
 
@@ -54,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         .setAction("Action", null).show();
             }
         });
-        Button red = findViewById(R.id.red);
+        Button red = (Button) findViewById(R.id.red);
         Button blue = findViewById(R.id.blue);
         Button green = findViewById(R.id.green);
         Button black = findViewById(R.id.black);

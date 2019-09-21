@@ -69,9 +69,13 @@ public class MySurface extends SurfaceView implements SurfaceHolder.Callback {
 
         // Draw the rectangle.
         paint.setColor(Color.BLACK);
-        canvas.drawRect(20, 20, 40, this.getHeight()/2 - 40, paint);
-        canvas.drawRect(20, this.getHeight()/2 - 40, this.getWidth()-20, this.getHeight()/2 -20, paint);
+        canvas.drawRect(20, 20, 40, this.getHeight()/2 , paint);
+        canvas.drawRect(20, this.getHeight() - 40, this.getWidth()-20, this.getHeight()/2 , paint);
 
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(40);
+
+        canvas.drawText("My text here", 40,40 ,paint);
         holder.unlockCanvasAndPost(canvas);
     }
 
