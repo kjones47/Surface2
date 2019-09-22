@@ -23,14 +23,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
     private Button redButton = null;
 
     private Button greenButton = null;
-
 
     private boolean drawBall = true;
 
@@ -45,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private int minY;
     private int maxY;
     private int color = Color.GREEN;
+    private float[] valX = new float[100];
+    private float[] valY = new float[100];
+    private int count = 0;
 
     MySurface customSurfaceView = null;
 
@@ -63,6 +67,21 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         .setAction("Action", null).show();
             }
         });
+
+      /*  TextView titleText = findViewById(R.id.title);
+        EditText one = findViewById(R.id.xAxis);
+        EditText two = findViewById(R.id.yAxis);
+
+        Button apply = (Button) findViewById(R.id.apply);
+        apply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // String first = one.getEditableText().toString();
+                //String second = two.getEditableText().toString();
+                // titleText.setText( "" + first + " vs. " + second, TextView.BufferType.NORMAL);
+            }
+        }); */
+
         Button red = (Button) findViewById(R.id.red);
         Button blue = findViewById(R.id.blue);
         Button green = findViewById(R.id.green);
@@ -122,12 +141,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     }
 
+
     private void initControls()
     {
-        if(redButton == null)
-        {
-            redButton = (Button)findViewById(R.id.redButton);
-        }
 
         if(greenButton == null)
         {
@@ -140,7 +156,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             canvasLayout = (LinearLayout)findViewById(R.id.customViewLayout);
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -173,8 +188,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             view.invalidate();
 
             float x = motionEvent.getX();
+            valX[count] = x;
 
             float y = motionEvent.getY();
+            valY[count] = y;
+
+            count++;
 
             customSurfaceView.setCircleX(x);
 
@@ -188,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
                 customSurfaceView.setPaint(paint);
 
-                customSurfaceView.drawPoint();
+                customSurfaceView.drawDot(count,valX, valY);
             } else {
                 // Create and set a green paint to custom surfaceview.
                 customSurfaceView.drawGraph();
@@ -197,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
                 customSurfaceView.setPaint(paint);
 
-                customSurfaceView.drawRect();
+                customSurfaceView.drawDot(count, valX, valY);
             }
 
             // Tell android os the onTouch event has been processed.
