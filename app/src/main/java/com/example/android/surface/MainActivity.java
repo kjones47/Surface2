@@ -1,14 +1,11 @@
 package com.example.android.surface;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.os.Bundle;
 
+import com.example.android.surface.MySurface;
+import com.example.android.surface.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -16,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Menu;
@@ -46,8 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private int minY;
     private int maxY;
     private int color = Color.GREEN;
-    private float[] valX = new float[100];
-    private float[] valY = new float[100];
+    private float[] valX;
+    private float[] valY;
     private int count = 0;
 
     MySurface customSurfaceView = null;
@@ -59,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        valX = new float[10];
+        valY = new float[10];
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,24 +66,40 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             }
         });
 
-      /*  TextView titleText = findViewById(R.id.title);
-        EditText one = findViewById(R.id.xAxis);
-        EditText two = findViewById(R.id.yAxis);
+        final TextView titleText = findViewById(R.id.title);
+        final EditText one = findViewById(R.id.xAxis);
+        final EditText two = findViewById(R.id.yAxis);
+        final EditText three = findViewById(R.id.maxX);
+        final EditText four = findViewById(R.id.maxY);
 
         Button apply = (Button) findViewById(R.id.apply);
         apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // String first = one.getEditableText().toString();
-                //String second = two.getEditableText().toString();
-                // titleText.setText( "" + first + " vs. " + second, TextView.BufferType.NORMAL);
+                String first = one.getEditableText().toString();
+                String second = two.getEditableText().toString();
+                int maxX = Integer.valueOf(three.getEditableText().toString());
+                int maxY = Integer.valueOf(four.getEditableText().toString());
+                titleText.setText( "" + first + " vs. " + second, TextView.BufferType.NORMAL);
+                Snackbar.make(view, "Changed Applied", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
-        }); */
-
-        Button red = (Button) findViewById(R.id.red);
+        });
+        Button red =  findViewById(R.id.red);
         Button blue = findViewById(R.id.blue);
         Button green = findViewById(R.id.green);
         Button black = findViewById(R.id.black);
+        Button reset = findViewById(R.id.greenButton);
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                count =0;
+                for(int i=0;i<valX.length;i++){
+                    valX[i] = 0;
+                    valY[i] = 0;
+                }
+            }
+        });
         red.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 color = Color.BLACK;
             }
         });
-
         setTitle("SurfaceView");
 
         initControls();
@@ -125,20 +138,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         canvasLayout.addView(customSurfaceView);
 
-        redButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawBall = true;
-            }
-        });
-
         greenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 drawBall = false;
             }
         });
-
     }
 
 
@@ -179,7 +184,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
 
@@ -201,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
             if (drawBall) {
                 // Create and set a red paint to custom surfaceview.
-                customSurfaceView.drawGraph();
+                customSurfaceView.drawGraph(maxX, maxY);
                 Paint paint = new Paint();
                 paint.setColor(color);
 
@@ -210,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 customSurfaceView.drawDot(count,valX, valY);
             } else {
                 // Create and set a green paint to custom surfaceview.
-                customSurfaceView.drawGraph();
+                customSurfaceView.drawGraph(maxX, maxY);
                 Paint paint = new Paint();
                 paint.setColor(color);
 

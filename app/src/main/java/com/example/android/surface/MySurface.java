@@ -36,7 +36,7 @@ public class MySurface extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder){
-        drawGraph();
+        drawGraph(10,10);
     }
 
     @Override
@@ -54,15 +54,15 @@ public class MySurface extends SurfaceView implements SurfaceHolder.Callback {
 
         Canvas c = holder.lockCanvas();
 
-        holder.unlockCanvasAndPost(c);
-
         paint.setColor(Color.BLUE);
         c.drawCircle(x, y, 10, paint);
 
+        holder.unlockCanvasAndPost(c);
     }
 
     public void drawRect()
     {
+        holder = getHolder();
         Canvas canvas = holder.lockCanvas();
 
 
@@ -74,6 +74,7 @@ public class MySurface extends SurfaceView implements SurfaceHolder.Callback {
 
     public void drawDot(int c, float[]x, float[]y)
     {
+        holder = getHolder();
         Canvas canvas = holder.lockCanvas();
         for(int i=0;i<c;i++){
             canvas.drawCircle(x[i], y[i], 10, paint);
@@ -83,7 +84,7 @@ public class MySurface extends SurfaceView implements SurfaceHolder.Callback {
         holder.unlockCanvasAndPost(canvas);
     }
 
-    public void drawGraph()
+    public void drawGraph(int x, int y)
     {
         Canvas canvas = holder.lockCanvas();
 
@@ -95,20 +96,19 @@ public class MySurface extends SurfaceView implements SurfaceHolder.Callback {
 
         // Draw the graph
         paint.setColor(Color.BLACK);
-        canvas.drawRect(50, 20, 70, this.getHeight() - 80, paint);
+        canvas.drawRect(80, 20, 100, this.getHeight() - 80, paint);
         //paint.setColor(Color.RED);
-        canvas.drawRect(50, this.getHeight()-100, this.getWidth()-50, this.getHeight() - 80 , paint);
+        canvas.drawRect(80, this.getHeight()-100, this.getWidth()-50, this.getHeight() - 80 , paint);
 
-
-
+        //Draw 0, max X and Y
+        paint.setColor(Color.BLUE);
+        paint.setTextSize(50);
+        canvas.drawText("" + x,0,60,paint);
+        canvas.drawText("0",0,this.getHeight()-20,paint);
+        canvas.drawText("" + y, this.getWidth()-150, this.getHeight()-20, paint);
         //Draw x and y axis
         paint.setColor(Color.BLUE);
-        paint.setTextSize(100);
-        canvas.save();
-        canvas.rotate(40, 90,0);
-        canvas.drawText(title, 30,30,paint);
-        canvas.restore();
-
+        paint.setTextSize(50);
 
         holder.unlockCanvasAndPost(canvas);
     }
